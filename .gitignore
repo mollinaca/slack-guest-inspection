@@ -1,3 +1,5 @@
+config.ini
 Pipfile.lock
 test.*
-config.ini
+*.log
+*.csv
