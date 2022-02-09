@@ -210,6 +210,7 @@ def inspection_guest(token: str, id: str) -> (bool, list):
 def main():
     TOKEN = loadconf()
     OUTPUT = [["team_id", "user_id", "user_name", "channels"]]
+    OUTPUT_FILE = "OUTPUT.csv"
 
     printr("[step1] : get all multiguests")
     guests = get_all_multiguests(TOKEN)
@@ -229,8 +230,8 @@ def main():
             OUTPUT.append([team, id, name, ret[1]])
     print("[step2] : inspection each guest -> done")
 
-    printr("[step3] : make output file.csv")
-    with open("OUTPUT.csv", "w") as f:
+    printr("[step3] : make output csv")
+    with open(OUTPUT_FILE, "w") as f:
         writer = csv.writer(f)
         for x in OUTPUT:
             writer.writerow(x)
