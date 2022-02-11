@@ -19,6 +19,11 @@ This is a script that looks for "multichannel guests that belong to one or fewer
 * Since the Slack WebAPI is executed in a loop, it may take some time if the number of users to be surveyed is large. If there is a possibility that the SlackAPI RateLimit has been reached, it will sleep for up to 61 seconds and continue to run, but if it still fails, it will throw an exception and the script will terminate.
 * Output the results to `OUTPUT.csv` when the scrutiny is complete.
   * If the `OUTPUT.csv` file already exists, it will be overwritten. If you don't want to lose the past execution results, save the file beforehand.
+* `OUTPUT.csv` will output one user per line that corresponds to the condition with the following contents.
+  * `team_id, user_id, user_name, user_email`
+  * `team_id` is an array. If he/she belong to more than one workspace, all workspace IDs will be output.
+    * If this is an empty array, it means that the user does not belong to any workspace → the user is still under invitation.
+
 
 ## information
 
