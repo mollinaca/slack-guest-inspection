@@ -133,7 +133,14 @@ def get_all_multiguests(token: str) -> list:
     res = api.d_users_list(token)
     for user in res["users"]:
         if user["is_restricted"] and not user["is_ultra_restricted"]:
-            ret.append([user["id"], user["name"], user["teams"]])
+            ret.append(
+                [
+                    user["teams"],
+                    user["id"],
+                    user["name"],
+                    user["profile"]["email"],
+                ]
+            )
 
     if "offset" in res:
         offset = res["offset"]
@@ -145,7 +152,14 @@ def get_all_multiguests(token: str) -> list:
             res = api.d_users_list(token, offset)
             for user in res["users"]:
                 if user["is_restricted"] and not user["is_ultra_restricted"]:
-                    ret.append([user["id"], user["name"], user["teams"]])
+                    ret.append(
+                        [
+                            user["teams"],
+                            user["id"],
+                            user["name"],
+                            user["profile"]["email"],
+                        ]
+                    )
             if "offset" in res:
                 offset = res["offset"]
             else:
@@ -209,7 +223,7 @@ def inspection_guest(token: str, id: str) -> (bool, list):
 
 def main():
     TOKEN = loadconf()
-    OUTPUT = [["team_id", "user_id", "user_name", "channels"]]
+    OUTPUT = [["team_id", "user_id", "user_name", "user_email"]]
     OUTPUT_FILE = "OUTPUT.csv"
 
     printr("[step1] : get all multiguests")
@@ -220,14 +234,14 @@ def main():
     i = 0
 
     printr("[step2] : inspection each guest")
-    for id, name, team in guests:
+    for team, id, name, email in guests:
         i += 1
         printr("[step2] : inspection each guest  " + str(i) + "/" + cnt_guests)
 
         time.sleep(1)
         ret = inspection_guest(TOKEN, id)
         if ret[0]:
-            OUTPUT.append([team, id, name, ret[1]])
+            OUTPUT.append([team, id, name, email])
     print("[step2] : inspection each guest -> done")
 
     printr("[step3] : make output csv")
